@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{fragments/layout}">
+  <head>
+    <title th:text="${titulo + ' proveedor'}"></title>
+    <meta charset="UTF-8">
+  </head>
+  <body>
+    <div layout:fragment="content">
+        <div class="row pt-1 pb-1 mb-1 mx-0 flex-nowrap">
+          <div class="col-md-auto w-auto pl-0">
+            <a class="btn btn-secondary" title="Regresar" th:href="@{/proveedores}">
+              <i class="fas fa-arrow-left fa-lg"></i>
+            </a>
+          </div>
+          <div class="col d-flex justify-content-center align-items-center pl-0">
+            <p class="h4 text-green m-0 text-nowrap" th:text="${titulo + ' Proveedor'}"></p>
+          </div>
+        </div>
+        <div>
+          <p
+          	id="swInfo" class="d-none"
+            th:data1="${desc}" 
+            th:data2="${session.swTitle}" 
+            th:data3="${session.swText}" 
+            th:data4="${session.swIcon}">
+          </p>
+          <form id="form" th:action="@{${accion}}" th:object=${proveedor} method="post" class="get-form">
+            <div class="row my-3 mx-0 col-s">
+              <div class="col p-0 mr-2 col-s">
+                <label class="h5">Nombre</label>            
+                <input th:if="${titulo == 'Nuevo'}" type="text" class="form-control form-control-lg" 
+                  id="nombre" th:name="nombre"
+                  autofocus="autofocus" placeholder="Ej.: Coca Cola" maxlength="100"
+                  title="Ingresar el nombre del proveedor" required>
+                
+                <!-- Input modificar --> 
+                <input th:if="${titulo == 'Modificar'}" type="text" class="form-control form-control-lg" 
+                  id="nombre" th:name="nombre" th:value="${proveedorModificar.nombre}"
+                  autofocus="autofocus" placeholder="Ej.: Coca Cola" maxlength="100"
+                  title="Ingresar el nombre del proveedor" required>
+              </div>
+              <div class="col p-0 mr-2 col-s">
+                <label class="h5">Teléfono</label>            
+                <input th:if="${titulo == 'Nuevo'}" type="text" class="form-control form-control-lg" 
+                  id="telefono" th:name="telefono"
+                  placeholder="Ej.: 3313215534" pattern="[0-9]{8,10}"
+                  title="Ingresar un teléfono valido" required>
+                
+                <!-- Input modificar --> 
+                <input th:if="${titulo == 'Modificar'}" type="text" class="form-control form-control-lg" 
+                  id="telefono" th:name="telefono" th:value="${proveedorModificar.telefono}"
+                  placeholder="Ej.: 3313215534" pattern="[0-9]{8,10}"
+                  title="Ingresar un teléfono valido" required>
+              </div>
+            </div>
+            
+            <div class="row my-3 mx-0  d-flex justify-content-end">
+              <button class="btn btn-green text-white font-weight-bold text-nowrap" type="submit">
+                Guardar proveedor
+   			  </button>
+            </div>
+          </form>
+        </div>
+    </div>
+  </body>
+</html>

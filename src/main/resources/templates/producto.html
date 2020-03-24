@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{fragments/layout}">
+  <head>
+    <title th:text="${titulo + ' producto'}"></title>
+    <meta charset="UTF-8">
+  </head>
+  <body>
+    <div layout:fragment="content">
+      <div class="row pt-1 pb-1 mb-1 mx-0 flex-nowrap">
+        <div class="col-md-auto w-auto pl-0">
+          <a class="btn btn-secondary" title="Regresar" th:href="@{/inventario}">
+            <i class="fas fa-arrow-left fa-lg"></i>
+          </a>
+        </div>
+        <div class="col d-flex justify-content-center align-items-center pl-0">
+          <p class="h4 text-green m-0 text-nowrap" th:text="${titulo + ' Producto'}"></p>
+        </div>
+      </div>
+      <div>
+        <p
+          id="swInfo" class="d-none"
+          th:data1="${desc}" 
+          th:data2="${session.swTitle}" 
+          th:data3="${session.swText}" 
+          th:data4="${session.swIcon}">
+        </p>
+        <form id="form" th:action="@{${accion}}" th:object=${producto} method="post" class="get-form">
+          <div class="row my-3 mx-0 col-s">
+            <div class="col p-0 col-s">
+              <label class="h5">Código de barras</label>            
+              <input th:if="${titulo == 'Nuevo'}" type="text" class="form-control form-control-lg" 
+                id="codigoBarra" th:name="codigoBarra" 
+                autofocus="autofocus" placeholder="Ej.: 7501055310227" pattern="[0-9]{1,20}" 
+                title="Ingresar un código de barras valido" required>
+                  
+              <!-- Input modificar --> 
+              <input th:if="${titulo == 'Modificar'}" type="text" class="form-control form-control-lg" 
+                id="codigoBarra" th:name="codigoBarra" th:value="${productoModificar.codigoBarra}"
+                placeholder="Ej.: 7501055310227" pattern="[0-9]{1,20}" 
+                title="Código de barras del producto" readonly>
+            </div>
+          </div>
+          
+          <div class="row my-3 mx-0 col-s">
+            <div class="col p-0 mr-2 col-s">
+              <label class="h5">Nombre</label>            
+              <input th:if="${titulo == 'Nuevo'}" type="text" class="form-control form-control-lg" 
+                id="nombre" th:name="nombre"
+                placeholder="Ej.: Coca Cola" maxlength="100"
+                title="Ingresar un nombre" required>
+                
+              <!-- Input modificar --> 
+              <input th:if="${titulo == 'Modificar'}" type="text" class="form-control form-control-lg" 
+                id="nombre" th:name="nombre" th:value="${productoModificar.nombre}"
+                autofocus="autofocus" placeholder="Ej.: Coca Cola" maxlength="100"
+                title="Ingresar un nombre" required>
+            </div>
+            <div class="col p-0 mr-2 col-s">
+              <label class="h5">Marca</label>            
+              <input th:if="${titulo == 'Nuevo'}" type="text" class="form-control form-control-lg" 
+                id="marca" th:name="marca"
+                placeholder="Ej.: Coke" maxlength="100"
+                title="Ingresar una marca" required>
+                
+              <!-- Input modificar --> 
+              <input th:if="${titulo == 'Modificar'}" type="text" class="form-control form-control-lg" 
+                id="marca" th:name="marca" th:value="${productoModificar.marca}"
+                placeholder="Ej.: Coke" maxlength="100"
+                title="Ingresar una marca" required>
+            </div>
+            <div class="col p-0 mr-2 col-s">
+              <label class="h5">Categoría</label>            
+              <select  th:if="${titulo == 'Nuevo'}" class="form-control form-control-lg" 
+                id="categoria" th:name="categoria.id"
+                title="Seleccionar una categoría" required>
+                  <option value="" selected disabled>Selecciona una categoría</option>
+                  <th:block th:each="categoria: ${categorias}">
+                    <option th:value="${categoria.id}" th:text="${categoria.nombre}"></option>
+                  </th:block>
+                  <option value="null">Otra</option>
+              </select>
+                
+              <!-- Input modificar --> 
+              <select  th:if="${titulo == 'Modificar'}" class="form-control form-control-lg" 
+                id="categoria" th:name="categoria.id"
+                title="Seleccionar una categoría" required>
+                  <option value="" disabled>Selecciona una categoría</option>
+                  <th:block th:each="categoria: ${categorias}">
+                    <option th:value="${categoria.id}" th:text="${categoria.nombre}" 
+                    th:selected="${productoModificar.categoria.id == categoria.id}"></option>
+                  </th:block>
+                  <option value="null">Otra</option>
+              </select>
+            </div>
+              
+            <div id="nuevaCategoria" class="col p-0 d-none col-s">  
+              <label class="h5 text-green">Nueva categoría</label>            
+              <input type="text" class="form-control form-control-lg" 
+                th:name="categoria.nombre"
+                placeholder="Ingresar nueva categoría" maxlength="100"
+                title="Ingresar nueva categoría">
+            </div>
+          </div>
+            
+          <div class="row my-3 mx-0 col-s">
+            <div class="col p-0 mr-2 col-s">
+              <label class="h5">Tamaño</label>
+              <input th:if="${titulo== 'Nuevo'}" type="text" class="form-control form-control-lg" 
+                id="tamano" th:name="tamano"
+                placeholder="Ej.: 2L" maxlength="10"
+                title="Ingresar un tamaño" required>
+                
+              <!-- Input modificar --> 
+              <input th:if="${titulo == 'Modificar'}" type="text" class="form-control form-control-lg" 
+                id="tamano" th:name="tamano"
+                placeholder="Ej.: 2L" maxlength="10" th:value="${productoModificar.tamano}"
+                title="Ingresar un tamaño" required>
+            </div>
+            <div class="col p-0 mr-2 col-s">
+              <label class="h5">Precio compra</label>            
+              <input th:if="${titulo == 'Nuevo'}" type="number" class="form-control form-control-lg" 
+                id="precioCompra" th:name="precioCompra"
+                placeholder="Ej.: 21.50" min="0.1" step=".01"
+                title="Ingresar un precio valido" required>
+                
+              <!-- Input modificar --> 
+              <input th:if="${titulo == 'Modificar'}" type="number" class="form-control form-control-lg fix-decimals" 
+                id="precioCompra" th:name="precioCompra" th:value="${productoModificar.precioCompra}"
+                placeholder="Ej.: 21.50" min="0.1" step=".01"
+                title="Ingresar un precio valido" required>
+            </div>
+            <div class="col p-0 mr-2 col-s">
+              <label class="h5">Precio venta</label>            
+              <input th:if="${titulo == 'Nuevo'}" type="number" class="form-control form-control-lg" 
+                id="precioVenta" th:name="precioVenta"
+                placeholder="Ej.: 23" min="0.1" step=".01"
+                title="Ingresar un precio valido" required>
+                
+              <!-- Input modificar --> 
+              <input th:if="${titulo == 'Modificar'}" type="number" class="form-control form-control-lg fix-decimals" 
+                id="precioVenta" th:name="precioVenta" th:value="${productoModificar.precioVenta}"
+                placeholder="Ej.: 23" min="0.1" step=".01"
+                title="Ingresar un precio valido" required>
+            </div>
+            <div class="col p-0 col-s">
+              <label class="h5">Existencia</label>            
+              <input th:if="${titulo == 'Nuevo'}" type="number" class="form-control form-control-lg" 
+                id="existencia" th:name="existencia"
+                placeholder="Ej.: 10" min="0" pattern="[0-9]" 
+                title="Ingresar un existencia valida" required>
+                
+              <!-- Input modificar --> 
+              <input th:if="${titulo == 'Modificar'}" type="number" class="form-control form-control-lg" 
+                id="existencia" th:name="existencia" th:value="${productoModificar.existencia}"
+                placeholder="Ej.: 10" min="0" pattern="[0-9]" 
+                title="Ingresar un existencia valida" required>
+            </div>
+          </div>
+            
+          <div class="row my-3 mx-0  d-flex justify-content-end">
+            <button class="btn btn-green text-white font-weight-bold text-nowrap" type="submit">
+              Guardar producto
+   	        </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <th:block layout:fragment="decimal"><script th:src="@{/js/fixdecimals.js}"></script></th:block>
+  </body>
+</html>

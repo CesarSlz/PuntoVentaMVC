@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{fragments/layout}">
+  <head>
+    <title th:text="${titulo + ' empleado'}"></title>
+    <meta charset="UTF-8">
+  </head>
+  <body>
+    <div layout:fragment="content">
+        <div class="row pt-1 pb-1 mb-1 mx-0 flex-nowrap">
+          <div class="col-md-auto w-auto pl-0">
+            <a class="btn btn-secondary" title="Regresar" th:href="@{/empleados}">
+              <i class="fas fa-arrow-left fa-lg"></i>
+            </a>
+          </div>
+          <div class="col d-flex justify-content-center align-items-center pl-0">
+            <p class="h4 text-green m-0 text-nowrap" th:text="${titulo + ' Empleado'}"></p>
+          </div>
+        </div>
+        <div>
+          <p
+          	id="swInfo" class="d-none"
+            th:data1="${desc}" 
+            th:data2="${session.swTitle}" 
+            th:data3="${session.swText}" 
+            th:data4="${session.swIcon}">
+          </p>
+          <form id="form" th:action="@{${accion}}" th:object=${empleado} method="post" class="get-form">
+            <div class="row my-3 mx-0 col-s">
+              <div class="col p-0 mr-2 col-s">
+                <label class="h5">Nombre</label>            
+                <input th:if="${titulo == 'Nuevo'}" type="text" class="form-control form-control-lg" 
+                  id="nombre" th:name="nombre"
+                  autofocus="autofocus" placeholder="Ej.: César Alfonso" maxlength="20"
+                  title="Ingresar el nombre del empleado" required>
+                
+                <!-- Input modificar --> 
+                <input th:if="${titulo == 'Modificar'}" type="text" class="form-control form-control-lg" 
+                  id="nombre" th:name="nombre" th:value="${empleadoModificar.nombre}"
+                  autofocus="autofocus" placeholder="Ej.: César Alfonso" maxlength="20"
+                  title="Ingresar el nombre del empleado" required>
+              </div>
+              <div class="col p-0 mr-2 col-s">
+                <label class="h5">Apellido paterno</label>            
+                <input th:if="${titulo == 'Nuevo'}" type="text" class="form-control form-control-lg" 
+                  id="apellidoPaterno" th:name="apellidoPaterno"
+                  placeholder="Ej.: Salazar" maxlength="15"
+                  title="Ingresar el apellido paterno del empleado" required>
+                
+                <!-- Input modificar --> 
+                <input th:if="${titulo == 'Modificar'}" type="text" class="form-control form-control-lg" 
+                  id="apellidoPaterno" th:name="apellidoPaterno" th:value="${empleadoModificar.apellidoPaterno}"
+                  placeholder="Ej.: Salazar" maxlength="15"
+                  title="Ingresar el apellido paterno del empleado" required>
+              </div>
+              <div class="col p-0 mr-2 col-s">
+                <label class="h5">Apellido materno</label>            
+                <input th:if="${titulo == 'Nuevo'}" type="text" class="form-control form-control-lg" 
+                  id="apellidoMaterno" th:name="apellidoMaterno"
+                  placeholder="Ej.: Araujo" maxlength="15"
+                  title="Ingresar el apellido materno del empleado" required>
+                
+                <!-- Input modificar --> 
+                <input th:if="${titulo == 'Modificar'}" type="text" class="form-control form-control-lg" 
+                  id="apellidoMat" th:name="apellidoMaterno" th:value="${empleadoModificar.apellidoMaterno}"
+                  placeholder="Ej.: Araujo" maxlength="15"
+                  title="Ingresar el apellido materno del empleado" required>
+              </div>
+            </div>
+            
+            <div class="row my-3 mx-0 col-s">
+              <div class="col p-0 mr-2 col-s">
+                <label class="h5">Puesto</label>            
+                <select  th:if="${titulo == 'Nuevo'}" class="form-control form-control-lg" 
+                  id="puesto" th:name="puesto.id"
+                  title="Seleccionar un puesto" required>
+                    <option value="" selected disabled>Selecciona un puesto</option>
+                    <th:block th:each="puesto: ${puestos}">
+                      <option th:value="${puesto.id}" th:text="${puesto.nombre}"></option>
+                    </th:block>
+                    <option value="null">Otro</option>
+                </select>
+                
+                <!-- Input modificar --> 
+                <select  th:if="${titulo == 'Modificar'}" class="form-control form-control-lg" 
+                  id="puesto" th:name="puesto.id"
+                  title="Seleccionar un puesto" required>
+                    <option value="" disabled>Selecciona un puesto</option>
+                    <th:block th:each="puesto: ${puestos}">
+                      <option th:value="${puesto.id}" th:text="${puesto.nombre}" 
+                      th:selected="${empleadoModificar.puesto.id == puesto.id}"></option>
+                    </th:block>
+                    <option value="null">Otro</option>
+                </select>
+              </div>
+              
+              <div id="nuevoPuesto" class="col p-0 mr-2 d-none col-s">  
+                <label class="h5 text-green">Nuevo puesto</label>            
+                <input type="text" class="form-control form-control-lg" 
+                  th:name="puesto.nombre"
+                  placeholder="Ingresar nuevo puesto" maxlength="50"
+                  title="Ingresar nuevo puesto">
+              </div>
+              
+              <div id="nuevoSalario" class="col p-0 mr-2 d-none col-s">  
+                <label class="h5 text-green">Salario</label>            
+                <input type="number" class="form-control form-control-lg" 
+                  th:name="puesto.salario"
+                  placeholder="Ingresar salario" min="0.1" step=".01"
+                  title="Ingresar salario">
+              </div>
+              
+              <div class="col p-0 mr-2 col-s">
+                <label class="h5">Usuario</label>            
+                <select  th:if="${titulo == 'Nuevo'}" class="form-control form-control-lg" 
+                  id="usuario" th:name="usuario.id"
+                  title="Seleccionar un usuario" required>
+                    <option value="" selected disabled>Selecciona un usuario</option>
+                    <th:block th:each="usuario: ${usuarios}">
+                      <option th:value="${usuario.id}" th:text="${usuario.tipo}"></option>
+                    </th:block>
+                </select>
+                
+                <!-- Input modificar --> 
+                <select  th:if="${titulo == 'Modificar'}" class="form-control form-control-lg" 
+                  id="usuario" th:name="usuario.id"
+                  title="Seleccionar un usuario" required>
+                    <option value="" disabled>Selecciona un usuario</option>
+                    <th:block th:each="usuario: ${usuarios}">
+                      <option th:value="${usuario.id}" th:text="${usuario.tipo}" 
+                      th:selected="${empleadoModificar.usuario.id == usuario.id}"></option>
+                    </th:block>
+                </select>
+              </div>
+            </div>
+            
+            <div class="row my-3 mx-0 col-s">
+              <div class="col p-0 mr-2 col-s">
+                <label class="h5">Teléfono</label>            
+                <input th:if="${titulo == 'Nuevo'}" type="text" class="form-control form-control-lg" 
+                  id="telefono" th:name="telefono"
+                  placeholder="Ej.: 3313215534" pattern="[0-9]{10}"
+                  title="Ingresar un teléfono valido" required>
+                
+                <!-- Input modificar --> 
+                <input th:if="${titulo == 'Modificar'}" type="text" class="form-control form-control-lg" 
+                  id="telefono" th:name="telefono" th:value="${empleadoModificar.telefono}"
+                  placeholder="Ej.: 3313215534" pattern="[0-9]{10}"
+                  title="Ingresar un teléfono valido" required>
+              </div>
+              <div class="col p-0 mr-2 col-s">
+                <label class="h5">Contraseña</label>            
+                <input th:if="${titulo == 'Nuevo'}" type="text" class="form-control form-control-lg" 
+                  id="contrasena" th:name="contrasena"
+                  placeholder="Contraseña" maxlength="255"
+                  title="Ingresar una contraseña" required>
+                
+                <!-- Input modificar --> 
+                <input th:if="${titulo == 'Modificar'}" type="text" class="form-control form-control-lg" 
+                  id="contrasena" th:name="contrasena" th:value="${empleadoModificar.contrasena}"
+                  placeholder="Contraseña" maxlength="255"
+                  title="Ingresar una contraseña" required>
+              </div>
+            </div>
+            
+            <div class="row my-3 mx-0  d-flex justify-content-end">
+              <button class="btn btn-green text-white font-weight-bold text-nowrap" type="submit">
+                Guardar empleado
+   			  </button>
+            </div>
+          </form>
+        </div>
+    </div>
+  </body>
+</html>

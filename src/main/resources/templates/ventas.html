@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{fragments/layout}">
+  <head>
+    <title>Ventas</title>
+    <meta charset="UTF-8">
+  </head>
+  <body>
+    <div layout:fragment="content">
+      <div class="row pt-1 pb-1 mb-1 mx-0 flex-nowrap">
+        <div class="col pl-0">
+          <a class="btn btn-green text-white font-weight-bold text-nowrap" title="Registrar nueva venta"
+            th:href="@{/venta/nueva}">
+            Nueva Venta
+          </a>
+        </div>
+        <div class="col-md-auto pr-0 dropdown">
+          <button class="btn btn-secondary float-right" 
+          type="button" id="filterButton" 
+          data-toggle="dropdown" aria-haspopup="true" 
+          aria-expanded="false"
+          title="Filtrar ventas de la tabla">
+            <i class="fas fa-filter"></i>
+          </button>
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="filterButton">
+            <input id="filtro" type="text" class="form-control m-2" placeholder="Filtrar por datos de la venta">
+          </div>
+        </div>
+      </div>
+      <p
+      id="swInfo" class="d-none"
+      th:data1="${desc}" 
+      th:data2="${session.swTitle}" 
+      th:data3="${session.swText}" 
+      th:data4="${session.swIcon}">
+      </p>
+      <div class="table-responsive">
+	    <table class="table table-hover">
+	      <thead class="thead-light">
+	        <tr>
+	          <th class="align-middle text-center">Código</th>
+	  	      <th class="align-middle text-center">Empleado</th>
+	  	      <th class="align-middle text-center">Cliente</th>
+	  	      <th class="align-middle text-center">Efectivo</th>
+	  	      <th class="align-middle text-center">Total</th>
+	  	      <th class="align-middle text-center">Fecha</th>
+	  	      <th:block th:if="${session.empleado.usuario.tipo == 'ROLE_ADMIN'}">
+	  	        <th class="align-middle text-center" colspan="2">Acciones</th>
+	  	      </th:block>
+	        </tr>
+	      </thead>
+	      <tbody id="tabla">
+	        <th:block th:each="venta: ${ventas}">
+              <tr>
+                <td class="text-center align-middle"><p th:text="${venta.id}"></p></td>
+                <td class="align-middle">
+                  <p th:text="${venta.empleado.nombre} 
+                  + ' ' + ${venta.empleado.apellidoPaterno} 
+                  + ' ' + ${venta.empleado.apellidoMaterno}">
+                  </p>
+                </td>
+                <td class="text-center align-middle"><p th:text="${venta.cliente}"></p></td>
+                <td class="text-center align-middle">
+                  <p th:text="${#strings.concat('$', #numbers.formatDecimal(venta.efectivo, 1, 2, 'POINT'))}"></p>
+                </td>
+                <td class="text-center align-middle">
+                  <p th:text="${#strings.concat('$', #numbers.formatDecimal(venta.total, 1, 2, 'POINT'))}"></p>
+                </td>
+                <td class="text-center align-middle">
+                  <th:block th:with="sdf = ${new java.text.SimpleDateFormat('yyyy-MM-dd''T''HH:mm:ss')}">
+                    <p th:text=" ${#dates.format(
+                    #calendars.createForTimeZone(
+                    #calendars.year(sdf.parse(venta.fechaCreacion)), 
+                    #calendars.month(sdf.parse(venta.fechaCreacion)), 
+                    #calendars.day(sdf.parse(venta.fechaCreacion)), 
+                    #calendars.hour(sdf.parse(venta.fechaCreacion)), 
+                    #calendars.minute(sdf.parse(venta.fechaCreacion)),'Mexico_City'), 'dd/MM/yyyy HH:mm')}"></p>
+                  </th:block>
+                </td>
+                <th:block th:if="${session.empleado.usuario.tipo == 'ROLE_ADMIN'}">
+                  <td class="text-center align-middle" style="width: 5%;">
+                    <a class="btn btn-primary" title="Modificar venta" th:href="@{'/venta/' + ${venta.id}}">
+                      <i class="fas fa-edit fa-sm"></i>
+                    </a>
+                  </td>
+                  <td class="text-center align-middle" style="width: 5%;">
+                  <form th:action="@{'/deleteVenta/' + ${venta.id}}" method="post" class="get-form">
+                    <button class="btn btn-danger" type="submit" title="Eliminar venta">
+                      <i class="fas fa-trash-alt fa-sm"></i>
+                    </button>
+                  </form>
+                  </td>
+                </th:block>
+              </tr>
+            </th:block>
+          </tbody>
+	    </table>
+	  </div>
+    </div>
+    <th:block layout:fragment="chart"><script th:src="@{/js/tablefilter.js}"></script></th:block>
+  </body>
+</html>

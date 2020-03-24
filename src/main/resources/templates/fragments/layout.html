@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+	<link rel="icon" th:href="@{/img/logo.png}">
+    <link rel="stylesheet" type="text/css" 
+      th:href="@{https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}">
+    
+    <script th:src="@{https://code.jquery.com/jquery-3.4.1.slim.min.js}"></script>
+    <script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js}"></script>
+    <script th:src="@{https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js}"></script>
+    <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js}"></script>
+    <script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.js}"></script>
+    <script th:src="@{/fontawesome/all.js}"></script>
+    <script th:src="@{/js/productsearch.js}"></script>
+    <script th:src="@{/js/productverifier.js}"></script>
+    <script th:src="@{/js/addinput.js}"></script>
+    <script th:src="@{/js/calculator.js}"></script>
+    <script th:src="@{/js/currentdate.js}"></script>
+        
+    <th:block layout:fragment="filter"></th:block>
+    <th:block layout:fragment="decimal"></th:block>
+    <th:block layout:fragment="chart"></th:block>
+    
+    <title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE"></title>
+  </head>
+  <body>
+    <div class="main-container">
+      <div th:replace="fragments/header :: header"></div>
+      
+      <div class="container col content-padding">
+        <th:block layout:fragment="content"></th:block>
+        
+        <script th:src="@{/sweetalert/sweetalert2.all.min.js}"></script>
+        <script th:src="@{/sweetalert/confirmdialog.js}"></script>
+        <script th:src="@{/sweetalert/modal.js}"></script>
+        <script th:src="@{/js/showelement.js}"></script>
+        <script th:src="@{/js/checkinput.js}"></script>
+        <script th:src="@{/js/deleteabono.js}"></script>
+      </div>
+      
+      <div th:replace="fragments/footer :: footer"></div>
+    </div>
+  </body>
+</html>

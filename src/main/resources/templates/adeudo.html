@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{fragments/layout}">
+  <head>
+    <title>Adeudo</title>
+    <meta charset="UTF-8">
+  </head>
+  <body>
+    <div layout:fragment="content">
+      <div class="row pt-1 pb-1 mb-1 mx-0 flex-nowrap">
+        <div class="col-md-auto w-auto pl-0">
+          <a class="btn btn-secondary" title="Regresar" th:href="@{/adeudos}">
+            <i class="fas fa-arrow-left fa-lg"></i>
+          </a>
+        </div>
+        <div class="col d-flex justify-content-center align-items-center pl-0">
+          <p id="operacion" class="h4 text-green m-0 text-nowrap">Pagar Adeudo</p>
+        </div>
+      </div>
+      <div>
+        <p
+         id="swInfo" class="d-none"
+          th:data1="${desc}" 
+          th:data2="${session.swTitle}" 
+          th:data3="${session.swText}" 
+          th:data4="${session.swIcon}">
+        </p>
+        <form id="form" th:action="@{${accion}}" th:object=${abono} method="post" class="get-form">
+          <th:block th:with="result=${#numbers.formatDecimal(adeudo.monto, 1, 2, 'POINT')} - 
+          ${#numbers.formatDecimal(abonado, 1, 2, 'POINT')}">
+            <div class="row pl-3 my-3 mr-0">
+              <div class="col">
+                <div class="row mb-2">
+                  <div class="col-1 p-0 mr-2 col-s">
+                    <label class="h5">Compra</label>
+                    <input type="text" class="form-control form-control-lg" 
+                    th:value="${adeudo.compra.id}" 
+                    title="Número de compra" readonly>
+                  </div>
+                  
+                  <div class="col p-0 mr-2 col-s">
+                    <label class="h5">Proveedor</label>
+                    <input type="text" class="form-control form-control-lg" 
+                    th:value="${adeudo.compra.proveedor.nombre}" 
+                    title="Proveedor" readonly>
+                  </div>
+                  
+                  <div class="col p-0 mr-2 col-s">
+                    <label class="h5">Empleado</label>
+                    <input type="text" class="form-control form-control-lg" 
+                    th:value="${adeudo.compra.empleado.nombre 
+                    + ' ' + adeudo.compra.empleado.apellidoPaterno 
+                    + ' ' + adeudo.compra.empleado.apellidoMaterno}" 
+                    title="Empleado" readonly>
+                  </div>
+                  
+                  <th:block th:with="sdf = ${new java.text.SimpleDateFormat('yyyy-MM-dd''T''HH:mm:ss')}">
+                    <div class="col p-0 margin-right col-s">
+                      <label class="h5">Fecha</label>
+                      <input type="text" class="form-control form-control-lg"
+                      th:value="${#dates.format(
+                      #calendars.createForTimeZone(
+                      #calendars.year(sdf.parse(adeudo.compra.fechaCreacion)), 
+                      #calendars.month(sdf.parse(adeudo.compra.fechaCreacion)), 
+                      #calendars.day(sdf.parse(adeudo.compra.fechaCreacion)), 
+                      #calendars.hour(sdf.parse(adeudo.compra.fechaCreacion)), 
+                      #calendars.minute(sdf.parse(adeudo.compra.fechaCreacion)),'Mexico_City'), 'dd/MM/yyyy HH:mm')}"
+                      title="Fecha de la compra" readonly>
+                    </div>
+                  </th:block>           
+                </div>
+                  
+                <div class="row margin-bottom">
+                  <input type="hidden" id="adeudo" 
+                  th:name="adeudo.id" th:value="${adeudo.id}" required>
+                    
+                  <div class="col p-0 mr-2 col-s">
+                    <label class="h5">Adeudo</label>
+                    <input type="text" id="estatus" class="form-control form-control-lg"  
+                    th:value="${adeudo.estatus} ? 'Pagado' : 'Pendiente'" 
+                    title="Estatus del adeudo" readonly>
+                  </div>
+                    
+                  <div class="col-1 p-0 margin-right col-s">
+                    <label class="h5">Monto</label>            
+                    <input type="number" class="form-control form-control-lg fix-decimals"
+                    min="0.1" step=".01" th:value="${adeudo.monto}" 
+                    title="Monto del adeudo"  readonly>
+                  </div>
+                </div>
+                   
+                <th:block th:each="pago, i: ${abonos}">
+                  <div  th:if="${i.index == 0}" id="pago-header" class="row">
+                    <div class="col p-0 mr-2">
+                      <label class="h5 label-show">Pagos</label>
+                    </div>
+                    <div class="col p-0 margin-right">
+                      <label class="h5 label-show">Fecha</label>
+                    </div>
+                  </div>
+                  <div class="row mb-2">
+                    <div class="col p-0 mr-2 col-s">
+                      <label class="h5 label-hide">Pagos</label>
+                      <input type="number" th:id="${'pago-' + pago.id}" class="form-control form-control-lg fix-decimals" 
+                      min="0.1" step=".01" th:value="${pago.monto}" title="Monto del abono" readonly>
+                    </div>
+                      
+                    <th:block th:with="sdf = ${new java.text.SimpleDateFormat('yyyy-MM-dd''T''HH:mm:ss')}">
+                      <div class="col p-0 mr-2 col-s">
+                        <label class="h5 label-hide">Fecha</label>
+                        <input type="text" class="form-control form-control-lg"
+                        th:value="${#dates.format(
+                        #calendars.createForTimeZone(
+                        #calendars.year(sdf.parse(pago.fechaCreacion)), 
+                        #calendars.month(sdf.parse(pago.fechaCreacion)), 
+                        #calendars.day(sdf.parse(pago.fechaCreacion)), 
+                        #calendars.hour(sdf.parse(pago.fechaCreacion)), 
+                        #calendars.minute(sdf.parse(pago.fechaCreacion)),'Mexico_City'), 'dd/MM/yyyy HH:mm')}"
+                        title="Fecha del abono" readonly>
+                      </div>
+                    </th:block>
+                      
+                    <div class="col-md-auto p-0 mr-2 d-flex align-items-center col-s">
+                      <button type="button" th:id="${'btn-delete-pago' + pago.id}"
+                      class="btn btn-danger rounded-circle mx-auto delete-abono">
+					    <i class="fas fa-times"></i>
+				      </button>
+                    </div>
+                  </div>
+                </th:block> 
+              </div>
+ 
+              <div class="quantities-size p-0 col-s">
+                <div class="col p-0 mb-2">
+                  <label class="h5 float-right">Total</label>            
+                  <input type="number" class="form-control form-control-lg text-right fix-decimals" 
+                  placeholder="Total" min="0.1" step=".01" th:value="${adeudo.compra.total}" 
+                  title="Total de la compra" readonly>
+                </div>
+                
+                <div class="col p-0 mb-2">
+                  <label class="h5 float-right">Saldo</label>            
+                  <input type="number" class="form-control form-control-lg text-right" 
+                  id="saldo" placeholder="Saldo" min="0.1" step=".01"
+                  th:value="${result}"
+                  title="Saldo pendiente" readonly>
+                </div>
+              
+                <div class="col p-0 mb-5">
+                  <label class="h5 float-right">Pago</label>            
+                  <input type="number" class="form-control form-control-lg text-right"
+                  id="monto" th:name="monto"
+                  autofocus="autofocus" placeholder="Pago" min="0.1" step=".01" title="Monto a pagar" 
+                  th:attrappend="max=${result}" required>
+                </div>
+              </div>
+            </div>
+            
+            <div class="row button-fixed d-flex justify-content-end fixed-bottom">
+              <button id="check-adeudo" 
+              class="btn btn-green text-white font-weight-bold button-size" type="submit"
+              th:attrappend="disabled=${result == 0} ? 'true'">
+                Guardar pago
+   			  </button>
+            </div>
+          </th:block>
+        </form>
+      </div>
+    </div>
+    <th:block layout:fragment="decimal"><script th:src="@{/js/fixdecimals.js}"></script></th:block>
+  </body>
+</html>

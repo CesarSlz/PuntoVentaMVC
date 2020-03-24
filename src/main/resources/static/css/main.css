@@ -1,0 +1,278 @@
+html, body {
+	height: 100% !important;
+	position: relative;
+}
+
+footer {
+    height: 40px;
+    width: 100%;
+    bottom: 0;
+    position: absolute;
+    background-image: url('/img/nature.jpg');
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+footer p {
+    margin: 0;
+    bottom: 0;
+    color: white;
+    text-align: center;
+}
+
+@media (max-width: 492px) {
+/* For mobile phones: */
+footer p {
+    font-size: 13px;
+	}
+}
+
+.main-container {
+	min-height: 100%;
+	overflow: hidden;
+	display: block;
+	position: relative;
+	padding-bottom: 40px;
+}
+
+.content-padding {
+	padding-left: 2rem;
+	padding-right: 2rem;
+	padding-top: 1.5rem;
+	padding-bottom: 1rem;
+}
+
+.footer-bg {
+	background: rgba(0,0,0, 0.6);
+	height: 40px;
+	
+}
+
+.footer-padding {
+	padding-left: 2rem;
+	padding-right: 2rem;
+}
+
+.footer-div-row {
+	height: 40px;
+    display: flex;
+    align-items: center;
+}
+
+.navbar-padding {
+	padding: .5rem 1rem;
+}
+
+.navbar-bg{
+	background-color: #333;
+}
+
+.navlink-fontsize {
+	font-size: 1.2rem;
+}
+
+.nav-link {
+    color: white !important;
+    -webkit-transition: .3s ease-in-out;
+}
+
+.nav-link:hover {
+    color: #9dc15b !important;
+    transition: .3s ease-in-out;
+}
+
+.title-align {
+	display: flex;
+	align-items: center;
+}
+
+.title-color {
+	color: #9dc15b !important;
+	-webkit-transition: .3s ease-in-out;
+}
+
+.title-color:hover {
+	color: white !important;
+	transition: .3s ease-in-out
+}
+  
+@media (max-width: 991px) {
+/* For mobile phones: */
+.title-display {
+	display: none;	
+	}
+}
+
+@media (max-width: 991px) {
+/* For mobile phones: */
+.logo-collapse {
+	position: absolute;
+    left: 0;
+    right: 0;
+    margin: auto;
+	}
+}
+
+.menu-icon-padding {
+	padding: .2rem 1rem;
+}
+
+.btn-green {
+	background-color: #9dc15b;
+}
+
+.btn-green:hover {
+	background-color:#88a84f;
+}
+
+.table-height {
+	height: 1px;
+	line-height: 1px;
+}
+
+.login-bg-img {
+	background-image: url('/img/nature.jpg');
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+.login-bg-color {
+	background: rgba(0, 0, 0, 0.6);
+}
+
+.login-bg-form {
+	background: white;
+}
+
+.text-green {
+	color: #9dc15b;
+}
+
+.dropdown-menu {
+    width: 20vw !important;
+    height: 60px !important
+}
+
+.dropdown-menu.show {
+    display: flex !important;
+    align-items: center;
+}
+
+@media (max-width: 768px) {
+/* For mobile phones: */
+[class*="col-s"] {
+	width: 100% !important;
+    max-width: 100% !important;
+    flex-basis: auto !important;
+    margin-top: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    margin-bottom: .5rem !important;
+	}
+}
+
+.quantities-size {
+	position: relative;
+    width: 11%;
+    flex: 0 0 11%;
+    max-width: 11%;
+}
+
+.button-fixed {
+    margin-right: 2rem;
+    margin-bottom: 4rem;
+}
+
+@media (max-width: 768px) {
+.button-size {
+	width: auto;
+	}
+}
+
+@media screen and (max-width: 1279px) and (min-width: 769px) {
+	.button-size {
+	width: 10.5%;
+	padding-top: 0;
+	padding-bottom: 0;
+	}
+}
+
+.margin-right {
+	margin-right: 3.3rem;
+}
+
+.margin-bottom {
+	margin-bottom: 2.5rem; 
+}
+
+@media (min-width: 769px) {
+.label-hide {
+	display: none;
+	}
+}
+
+@media (max-width: 769px) {
+.label-show {
+	display: none;
+	}
+}
+
+.bill-label-size {
+	font-size: 1.57vw;
+	margin-bottom: .5rem;
+    font-weight: 500;
+    line-height: 1.2;
+    position: absolute;
+    top: 0;
+}
+
+@media (max-width: 768px) {
+/* For mobile phones: */
+.bill-label-size  {
+	font-size: 1.25rem !important;
+	margin-bottom: .5rem !important;
+    font-weight: 500 !important;
+    line-height: 1.2 !important;
+    position: relative !important;
+	}
+}
+
+@media (min-width: 1200px) {
+.bill-label-size  {
+	font-size: 1.25rem !important;
+	margin-bottom: .5rem !important;
+    font-weight: 500 !important;
+    line-height: 1.2 !important;
+	}
+}
+
+.bill-div-size {
+	display: flex;
+	align-items: flex-end;
+}
+
+@media (max-width: 768px) {
+/* For mobile phones: */
+.bill-div-size  {
+	display: block !important;
+	}
+}
+
+.bg-green {
+	background-color: #9dc15b;
+}
+
+/* Desaparecer simbolo de input type number */
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
+/* Desaparecer simbolo de input type number */
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}

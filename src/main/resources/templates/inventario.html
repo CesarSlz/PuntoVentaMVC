@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{fragments/layout}">
+  <head>
+    <title>Inventario</title>
+    <meta charset="UTF-8">
+  </head>
+  <body>
+    <div layout:fragment="content">
+      <div class="row pt-1 pb-1 mb-1 mx-0 flex-nowrap">
+        <div class="col pl-0">
+          <a class="btn btn-green text-white font-weight-bold text-nowrap" title="Registrar nuevo producto"
+            th:href="@{/producto/nuevo}">
+            Nuevo Producto
+          </a>
+        </div>
+        <div class="col-md-auto pr-0 dropdown">
+          <button class="btn btn-secondary float-right" 
+          type="button" id="filterButton" 
+          data-toggle="dropdown" aria-haspopup="true" 
+          aria-expanded="false"
+          title="Filtrar productos de la tabla">
+            <i class="fas fa-filter"></i>
+          </button>
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="filterButton">
+            <input id="filtro" type="text" class="form-control m-2" placeholder="Filtrar por datos del producto">
+          </div>
+        </div>
+      </div>
+      <p
+      id="swInfo" class="d-none"
+      th:data1="${desc}" 
+      th:data2="${session.swTitle}" 
+      th:data3="${session.swText}" 
+      th:data4="${session.swIcon}">
+      </p>
+      <div class="table-responsive">
+	    <table class="table table-hover">
+	      <thead class="thead-light">
+	        <tr>
+	          <th class="align-middle text-center" rowspan="2">Código</th>
+	  	      <th class="align-middle text-center" rowspan="2">Nombre</th>
+	  	      <th class="align-middle text-center" rowspan="2">Marca</th>
+	  	      <th class="align-middle text-center" rowspan="2">Tamaño</th>
+	  	      <th class="align-middle text-center table-height" colspan="2">Precio</th>
+	  	      <th class="align-middle text-center" rowspan="2">Categoría</th>
+	  	      <th class="align-middle text-center" rowspan="2">Existencia</th>
+	  	      <th:block th:if="${session.empleado.usuario.tipo == 'ROLE_ADMIN'}">
+	  	        <th class="align-middle text-center" colspan="2" rowspan="2">Acciones</th>
+	  	      </th:block>
+	        </tr>
+	        <tr>
+	          <th class="align-middle text-center table-height">Compra</th>
+	  	      <th class="align-middle text-center table-height">Venta</th>
+	        </tr>
+	      </thead>
+	      <tbody id="tabla">
+	        <th:block th:each="producto: ${productos}">
+              <tr>
+                <td class="text-center align-middle"><p th:text="${producto.codigoBarra}"></p></td>
+                <td class="align-middle"><p th:text="${producto.nombre}"></p></td>
+                <td class="align-middle"><p th:text="${producto.marca}"></p></td>
+                <td class="align-middle"><p th:text="${producto.tamano}"></p></td>
+                <td class="text-center align-middle">
+                  <p th:text="${#strings.concat('$', #numbers.formatDecimal(producto.precioCompra, 1, 2, 'POINT'))}"></p>
+                </td>
+                <td class="text-center align-middle" style="width: 7.22%;">
+                  <p th:text="${#strings.concat('$', #numbers.formatDecimal(producto.precioVenta, 1, 2, 'POINT'))}"></p>
+                </td>
+                <td class="align-middle"><p th:text="${producto.categoria.nombre}"></p></td>
+                <td class="text-center align-middle" th:classappend="${producto.existencia <= 3} ? 'text-danger'">
+                  <p th:text="${producto.existencia}"></p>
+                </td>
+                <th:block th:if="${session.empleado.usuario.tipo == 'ROLE_ADMIN'}">
+                  <td class="text-center align-middle" style="width: 5%;">
+                    <a class="btn btn-primary" title="Modificar producto" 
+                    th:href="@{'/producto/' + ${producto.codigoBarra}}">
+                      <i class="fas fa-edit fa-sm"></i>
+                    </a>
+                  </td>
+                  <td class="text-center align-middle" style="width: 5%;">
+                  <form th:action="@{'/deleteProducto/' + ${producto.codigoBarra}}" method="post" class="get-form">
+                    <button class="btn btn-danger" type="submit" title="Eliminar producto">
+                      <i class="fas fa-trash-alt fa-sm"></i>
+                    </button>
+                  </form>
+                  </td>
+                </th:block>
+              </tr>
+            </th:block>
+          </tbody>
+	    </table>
+	  </div>
+    </div>
+    <th:block layout:fragment="chart"><script th:src="@{/js/tablefilter.js}"></script></th:block>
+  </body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{fragments/layout}">
+  <head>
+    <title>Empleados</title>
+    <meta charset="UTF-8">
+  </head>
+  <body>
+    <div layout:fragment="content">
+      <div class="row pt-1 pb-1 mb-1 mx-0 flex-nowrap">
+        <div class="col pl-0">
+          <a class="btn btn-green text-white font-weight-bold text-nowrap" title="Registrar nuevo empleado"
+            th:href="@{/empleado/nuevo}">
+            Nuevo Empleado
+          </a>
+        </div>
+        <div class="col-md-auto pr-0 dropdown">
+          <button class="btn btn-secondary float-right" 
+          type="button" id="filterButton" 
+          data-toggle="dropdown" aria-haspopup="true" 
+          aria-expanded="false"
+          title="Filtrar empleados de la tabla">
+            <i class="fas fa-filter"></i>
+          </button>
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="filterButton">
+            <input id="filtro" type="text" class="form-control m-2" placeholder="Filtrar por datos del empleado">
+          </div>
+        </div>
+      </div>
+      <p
+      id="swInfo" class="d-none"
+      th:data1="${desc}" 
+      th:data2="${session.swTitle}" 
+      th:data3="${session.swText}" 
+      th:data4="${session.swIcon}">
+      </p>
+      <div class="table-responsive">
+	    <table class="table table-hover">
+	      <thead class="thead-light">
+	        <tr>
+	          <th class="align-middle text-center">Código</th>
+	  	      <th class="align-middle text-center">Nombre</th>
+	  	      <th class="align-middle text-center">Télefono</th>
+	  	      <th class="align-middle text-center">Puesto</th>
+	  	      <th class="align-middle text-center">Tipo</th>
+	  	      <th class="align-middle text-center" colspan="2">Acciones</th>
+	        </tr>
+	      </thead>
+	      <tbody id="tabla">
+	        <th:block th:each="empleado: ${empleados}">
+              <tr>
+                <td class="text-center align-middle"><p th:text="${empleado.id}"></p></td>
+                <td class="align-middle">
+                  <p th:text="${empleado.nombre} 
+                  + ' ' + ${empleado.apellidoPaterno} 
+                  + ' ' + ${empleado.apellidoMaterno}">
+                  </p>
+                </td>
+                <td class="text-center align-middle"><p th:text="${empleado.telefono}"></p></td>
+                <td class="text-center align-middle"><p th:text="${empleado.puesto.nombre}"></p></td>
+                <td class="text-center align-middle">
+                  <p th:text="${#strings.toLowerCase(#strings.substring(empleado.usuario.tipo,5))}"></p>
+                </td>
+                <td class="text-center align-middle" style="width: 5%;" th:attrappend="colspan=${empleado.id == 1} ? '2'">
+                  <a class="btn btn-primary" title="Modificar empleado" th:href="@{'/empleado/' + ${empleado.id}}">
+                    <i class="fas fa-edit fa-sm"></i>
+                  </a>
+                </td>
+                <td th:if="${empleado.id != 1}" class="text-center align-middle" style="width: 5%;">
+                <form th:action="@{'/deleteEmpleado/' + ${empleado.id}}" method="post" class="get-form">
+                  <button class="btn btn-danger" type="submit" title="Eliminar empleado">
+                    <i class="fas fa-trash-alt fa-sm"></i>
+                  </button>
+                </form>
+                </td>
+              </tr>
+            </th:block>
+          </tbody>
+	    </table>
+	  </div>
+    </div>
+    <th:block layout:fragment="chart"><script th:src="@{/js/tablefilter.js}"></script></th:block>
+  </body>
+</html>

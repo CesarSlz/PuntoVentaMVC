@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{fragments/layout}">
+  <head>
+    <title th:text="${titulo + ' venta'}"></title>
+    <meta charset="UTF-8">
+  </head>
+  <body>
+    <div layout:fragment="content">
+      <div class="row pt-1 pb-1 mb-1 mx-0 flex-nowrap">
+        <div class="col-md-auto w-auto pl-0">
+          <a class="btn btn-secondary" title="Regresar" th:href="@{/ventas}">
+            <i class="fas fa-arrow-left fa-lg"></i>
+          </a>
+        </div>
+        <div class="col d-flex justify-content-center align-items-center pl-0">
+          <p id="operacion" class="h4 text-green m-0 text-nowrap" th:text="${titulo + ' Venta'}"></p>
+        </div>
+      </div>
+      <div>
+        <p
+       	  id="swInfo" class="d-none"
+          th:data1="${desc}" 
+          th:data2="${session.swTitle}" 
+          th:data3="${session.swText}" 
+          th:data4="${session.swIcon}">
+        </p>
+        <form id="form" th:action="@{${accion}}" th:object=${dventa} method="post" class="get-form">
+          <div class="row pl-3 my-3 mr-0">
+            <div id="product-container" class="col">
+              <th:block th:if="${titulo == 'Nueva'}">
+                <input type="hidden" id="empleado-0" 
+                th:name="venta.empleado.id" th:value="${session.empleado.id}" required>
+                    
+                <input type="hidden" id="cliente-0" 
+                th:name="venta.cliente" th:value="${noCliente}" required>
+              
+                <div class="row mb-2 product-row">
+                  <div class="col p-0 mr-2 col-s">
+                    <input type="hidden" id="detalleId-0"
+                    th:name="id[0]" value="0" required>
+                    
+                    <input type="hidden" id="producto-0" 
+                    th:name="producto[0].id" required>
+                  
+                    <label class="h5">Código</label>
+                    <input type="text" 
+                    class="form-control form-control-lg get-codigo" 
+                    id="codigoBarra-0" th:name="producto[0].codigoBarra"
+                    autofocus="autofocus" placeholder="Código" pattern="[0-9]{1,20}" 
+                    title="Ingresar un código de barras valido" required>
+                  </div>
+              
+                  <div class="col p-0 mr-2 col-s">
+                    <label class="h5">Nombre</label>            
+                    <input type="text" class="form-control form-control-lg" 
+                    id="nombre-0" th:name="producto[0].nombre"
+                    placeholder="Nombre" maxlength="100"
+                    title="Nombre del producto" readonly>
+                  </div>
+              
+                  <div class="col p-0 mr-2 col-s">
+                    <label class="h5">Marca</label>            
+                    <input type="text" class="form-control form-control-lg" 
+                    id="marca-0" th:name="producto[0].marca"
+                    placeholder="Marca" maxlength="100"
+                    title="Marca del producto" readonly>
+                  </div>
+              
+                  <div class="col-1 p-0 mr-2 bill-div-size col-s">
+                    <label class="bill-label-size">Tamaño</label>
+                    <input type="text" class="form-control form-control-lg"
+                    id="tamano-0" th:name="producto[0].tamano"
+                    placeholder="Tam." maxlength="10"
+                    title="Tamaño del producto" readonly>
+                  </div>
+            
+                  <div class="col-1 p-0 mr-2 bill-div-size col-s">
+                    <label class="bill-label-size">Precio</label>            
+                    <input type="number" class="form-control form-control-lg" 
+                    id="precio-0" th:name="producto[0].precioVenta"
+                    placeholder="Precio" min="0.1" step=".01"
+                    title="Precio de venta del producto" readonly>
+                  </div>
+              
+                  <div class="col-1 p-0 mr-2 bill-div-size col-s">
+                    <label class="bill-label-size">Cantidad</label>            
+                    <input type="number" 
+                    class="form-control form-control-lg get-cantidad" 
+                    id="cantidad-0" th:name="cantidad[0]"
+                    placeholder="Cant." min="1" pattern="[0-9]" 
+                    title="Ingresar un cantidad valida" required>
+                  </div>
+                  
+                  <div class="col-1 p-0 margin-right bill-div-size col-s">
+                    <label class="bill-label-size">Monto</label>            
+                    <input type="number" class="form-control form-control-lg" 
+                    id="monto-0" th:name="monto[0]"
+                    placeholder="Monto" min="0.1" step=".01"
+                    title="Monto del producto" readonly>
+                  </div>
+                </div>
+              </th:block>
+                
+              <!-- Input modificar -->
+              <th:block th:if="${titulo == 'Modificar'}">
+                <div class="row margin-bottom">
+                  <div class="col-1 p-0 mr-2 bill-div-size col-s">
+                    <label class="bill-label-size">Venta</label>
+                    <input type="text" class="form-control form-control-lg" 
+                    th:value="${ventaModificar.id}" 
+                    title="Número de venta" readonly>
+                  </div>
+                  
+                  <div class="col-1 p-0 mr-2 bill-div-size col-s">
+                    <label class="bill-label-size">Cliente</label>
+                    <input type="text" class="form-control form-control-lg" 
+                    th:value="${ventaModificar.cliente}" 
+                    title="Número de cliente" readonly>
+                  </div>
+                  
+                  <div class="col p-0 mr-2 col-s">
+                    <label class="h5">Empleado</label>
+                    <input type="text" class="form-control form-control-lg" 
+                    th:value="${ventaModificar.empleado.nombre 
+                    + ' ' + ventaModificar.empleado.apellidoPaterno 
+                    + ' ' + ventaModificar.empleado.apellidoMaterno}" 
+                    title="Empleado" readonly>
+                  </div>
+                 
+                  <th:block th:with="sdf = ${new java.text.SimpleDateFormat('yyyy-MM-dd''T''HH:mm:ss')}">
+                    <div class="col p-0 margin-right col-s">
+                      <label class="h5">Fecha</label>
+                      <input type="text" class="form-control form-control-lg"
+                      th:value="${#dates.format(
+                      #calendars.createForTimeZone(
+                      #calendars.year(sdf.parse(ventaModificar.fechaCreacion)), 
+                      #calendars.month(sdf.parse(ventaModificar.fechaCreacion)), 
+                      #calendars.day(sdf.parse(ventaModificar.fechaCreacion)), 
+                      #calendars.hour(sdf.parse(ventaModificar.fechaCreacion)), 
+                      #calendars.minute(sdf.parse(ventaModificar.fechaCreacion)),'Mexico_City'), 'dd/MM/yyyy HH:mm')}"
+                      title="Fecha de la venta" readonly>
+                    </div>
+                  </th:block>           
+                </div>
+                  
+                <input type="hidden" id="empleado-0" 
+                th:name="venta.empleado.id" th:value="${ventaModificar.empleado.id}" required>
+                   
+                <th:block th:each="detalle, i: ${detalleVentaModificar}">
+                  <div class="row mb-2 product-row" th:classappend="${i.index != 0} ? is-empty">
+                    <div class="col p-0 mr-2 col-s">
+                      <input type="hidden" th:id="${'detalleId-' + i.index}"
+                      th:name="${'id[' + i.index + ']'}" th:value="${detalle.id}" required>
+                      
+                      <input type="hidden" th:id="${'producto-' + i.index}"
+                      th:name="${'producto[' + i.index + '].id'}" th:value="${detalle.producto.id}" required>
+                  
+                      <label th:if="${i.index == 0}" class="h5">Código</label>
+                      <label th:if="${i.index != 0}" class="h5 label-hide">Código</label>
+                      <input type="text" 
+                      class="form-control form-control-lg get-codigo" 
+                      th:id="${'codigoBarra-' + i.index}" th:name="${'producto[' + i.index + '].codigoBarra'}"
+                      th:value="${detalle.producto.codigoBarra}"
+                      placeholder="Código" pattern="[0-9]{1,20}" 
+                      title="Código de barras del producto" required>
+                    </div>
+                    
+                    <div class="col p-0 mr-2 col-s">
+                      <label th:if="${i.index == 0}" class="h5">Nombre</label>
+                      <label th:if="${i.index != 0}" class="h5 label-hide">Nombre</label>          
+                      <input type="text" class="form-control form-control-lg" 
+                      th:id="${'nombre-' + i.index}" th:name="${'producto[' + i.index + '].nombre'}"
+                      th:value="${detalle.producto.nombre}"
+                      placeholder="Nombre" maxlength="100"
+                      title="Nombre del producto" readonly>
+                    </div>
+                    
+                    <div class="col p-0 mr-2 col-s">
+                      <label th:if="${i.index == 0}" class="h5">Marca</label>
+                      <label th:if="${i.index != 0}" class="h5 label-hide">Marca</label>
+                      <input type="text" class="form-control form-control-lg" 
+                      th:id="${'marca-' + i.index}" th:name="${'producto[' + i.index + '].marca'}"
+                      th:value="${detalle.producto.marca}"
+                      placeholder="Marca" maxlength="100"
+                      title="Marca del producto" readonly>
+                    </div>
+                    
+                    <div class="col-1 p-0 mr-2 bill-div-size col-s">
+                      <label th:if="${i.index == 0}" class="bill-label-size">Tamaño</label>
+                      <label th:if="${i.index != 0}" class="h5 label-hide">Tamaño</label>
+                      <input type="text" class="form-control form-control-lg" 
+                      th:id="${'tamano-' + i.index}" th:name="${'producto[' + i.index + '].tamano'}"
+                      th:value="${detalle.producto.tamano}"
+                      placeholder="Tam." maxlength="10"
+                      title="Tamaño del producto" readonly>
+                    </div>
+                    
+                    <div class="col-1 p-0 mr-2 bill-div-size col-s">
+                      <label th:if="${i.index == 0}" class="bill-label-size">Precio</label>
+                      <label th:if="${i.index != 0}" class="h5 label-hide">Precio</label>           
+                      <input type="number" class="form-control form-control-lg fix-decimals" 
+                      th:id="${'precio-' + i.index}" th:name="${'producto[' + i.index + '].precioVenta'}"
+                      th:value="${detalle.producto.precioVenta}"
+                      placeholder="Precio" min="0.1" step=".01"
+                      title="Precio de venta del producto" readonly>
+                    </div>
+                    
+                    <div class="col-1 p-0 mr-2 bill-div-size col-s">
+                      <label th:if="${i.index == 0}" class="bill-label-size">Cantidad</label>
+                      <label th:if="${i.index != 0}" class="h5 label-hide">Cantidad</label>            
+                      <input type="number" 
+                      class="form-control form-control-lg get-cantidad" 
+                      th:id="${'cantidad-' + i.index}" th:name="${'cantidad[' + i.index + ']'}"
+                      th:value="${detalle.cantidad}"
+                      placeholder="Cant." min="1" pattern="[0-9]" 
+                      title="Cantidad vendida" required>
+                    </div>
+                      
+                    <div class="col-1 p-0 bill-div-size col-s" th:classappend="${i.index == 0} ? margin-right : mr-2">
+                      <label th:if="${i.index == 0}" class="bill-label-size">Monto</label>
+                      <label th:if="${i.index != 0}" class="h5 label-hide">Monto</label>   
+                      <input type="number" class="form-control form-control-lg fix-decimals" 
+                      th:id="${'monto-' + i.index}" th:name="${'monto[' + i.index + ']'}"
+                      th:value="${detalle.monto}"
+                      placeholder="Monto" min="0.1" step=".01"
+                      title="Monto del producto" readonly>
+                    </div>
+                    
+                    <div th:if="${i.index != 0}" class="col-md-auto p-0 mr-2 d-flex align-items-center col-s">
+                      <button type="button" 
+                      th:id="${'btn-delete-' + i.index}"
+                      class="btn btn-danger rounded-circle mx-auto btn-delete">
+					    <i class="fas fa-times"></i>
+				      </button>
+                    </div>
+                  </div>
+                </th:block> 
+              </th:block>
+            </div>
+ 
+            <div class="quantities-size p-0 col-s">
+              <div class="col p-0 mb-2">
+                <label class="h5 float-right">Total</label>            
+                <input th:if="${titulo == 'Nueva'}" type="number" 
+                class="form-control form-control-lg text-right" 
+                id="total-0" th:name="venta.total"
+                placeholder="Total" min="0.1" step=".01"
+                title="Total de la venta" readonly>
+                  
+                <!-- Input modificar -->
+                <input th:if="${titulo == 'Modificar'}" type="number" 
+                class="form-control form-control-lg text-right fix-decimals" 
+                id="total-0" th:name="venta.total"
+                th:value="${ventaModificar.total}"
+                placeholder="Total" min="0.1" step=".01"
+                title="Total de la venta" readonly>
+              </div>
+             
+              <div class="col p-0 mb-2">
+                <label class="h5 float-right">Efectivo</label>            
+                <input th:if="${titulo == 'Nueva'}" type="number" 
+                class="form-control form-control-lg text-right" 
+                id="efectivo-0" th:name="venta.efectivo"
+                placeholder="Efectivo" min="0.1" step=".01"
+                title="Monto del efectivo" required>
+                  
+                <!-- Input modificar -->            
+                <input th:if="${titulo == 'Modificar'}" type="number" 
+                class="form-control form-control-lg text-right fix-decimals" 
+                id="efectivo-0" th:name="venta.efectivo"
+                th:value="${ventaModificar.efectivo}"
+                placeholder="Efectivo" min="0.1" step=".01"
+                title="Monto del efectivo" required>
+              </div>
+              
+              <div class="col p-0 mb-5">
+                <label class="h5 float-right">Cambio</label>            
+                <input th:if="${titulo == 'Nueva'}" type="text" id="cambio"
+                class="form-control form-control-lg text-right" 
+                placeholder="Cambio" min="0.1" step=".01"
+                title="Cambio" readonly required>
+                  
+                <!-- Input modificar -->             
+                <input th:if="${titulo == 'Modificar'}" type="text" id="cambio"
+                class="form-control form-control-lg text-right"
+                th:value="${#numbers.formatDecimal(ventaModificar.efectivo, 1, 2, 'POINT')} 
+                - ${#numbers.formatDecimal(ventaModificar.total, 1, 2, 'POINT')}"
+                placeholder="Cambio" min="0.1" step=".01"
+                title="Cambio" readonly>
+              </div>
+            </div>
+          </div>
+            
+          <div class="row button-fixed d-flex justify-content-end fixed-bottom">
+            <button id="check-empty-inputs" 
+            class="btn btn-green text-white font-weight-bold button-size" type="submit">
+              Guardar venta
+   		    </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <th:block layout:fragment="decimal"><script th:src="@{/js/fixdecimals.js}"></script></th:block>
+  </body>
+</html>

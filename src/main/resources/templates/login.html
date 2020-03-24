@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Inicio Sesión</title>
+    <link rel="icon" href="/img/logo.png">
+    <link rel="stylesheet" type="text/css" 
+      th:href="@{https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}">
+  </head>
+  <body class="login-bg-img">
+    <div class="d-flex text-center h-100 login-bg-color">
+      <div class="p-3 m-auto rounded login-bg-form">
+        <h4 class="mb-2">Iniciar Sesión</h4>
+      
+        <div class="alert alert-danger text-nowrap" th:if="${param.error}">
+	      <p class="m-0">Datos incorrectos</p>
+	    </div>
+	    
+	    <div class="alert alert-info text-nowrap" th:if="${param.logout}">
+	      Has cerrado sesión
+	    </div>
+	
+	    <div class="px-1">
+          <form th:action="@{/login}" method="post">
+            <div class="form-row my-3">
+              <input type="text" class="form-control form-control-lg" 
+                id="telefono" name="telefono" autofocus="autofocus" 
+                placeholder="Teléfono" pattern="[0-9]{10}" title="Ingresar teléfono a 10 digitos" required>
+            </div>
+            <div class="form-row my-3">
+              <input type="password" class="form-control form-control-lg"
+                id="contrasena" name="contrasena" placeholder="Contraseña"
+                required>
+            </div>
+            <div class="my-2">
+              <button class="btn btn-green text-white font-weight-bold text-nowrap" type="submit">Iniciar Sesión</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

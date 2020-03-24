@@ -1,0 +1,33 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8">
+  </head>
+  <body>
+    <th:block th:fragment="footer">
+      <footer>
+        <div class="footer-bg">
+          <div class="container col footer-padding">
+            <div class="row d-flex justify-content-between flex-nowrap footer-div-row">
+              <div class="col-md-auto">
+                <p><b class="title-color">&copy;</b>Abarrotes Fresno<p>
+              </div>
+              <div class="col-md-auto">
+                <p>
+                  <b class="title-color">Rol: </b>
+                  <span th:text="${#strings.toLowerCase(#strings.substring(session.empleado.usuario.tipo,5))}"></span>
+                </p>
+              </div>
+              <div class="col-md-auto">
+                <p>
+                  <b class="title-color">Fecha: </b>
+                  <span id="fecha"></span>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </th:block>
+  </body>
+</html>

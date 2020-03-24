@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{fragments/layout}">
+  <head>
+    <title th:text="${titulo + ' saldo'}"></title>
+    <meta charset="UTF-8">
+  </head>
+  <body>
+    <div layout:fragment="content">
+      <div class="row pt-1 pb-1 mb-1 mx-0 flex-nowrap">
+        <div class="col-md-auto w-auto pl-0">
+          <a class="btn btn-secondary" title="Regresar" th:href="@{/saldos}">
+            <i class="fas fa-arrow-left fa-lg"></i>
+          </a>
+        </div>
+        <div class="col d-flex justify-content-center align-items-center pl-0">
+          <p class="h4 text-green m-0 text-nowrap" th:text="${titulo + ' Saldo'}"></p>
+        </div>
+      </div>
+      <div>
+        <p
+       	  id="swInfo" class="d-none"
+          th:data1="${desc}" 
+          th:data2="${session.swTitle}" 
+          th:data3="${session.swText}" 
+          th:data4="${session.swIcon}">
+        </p>
+        <form id="form" th:action="@{${accion}}" th:object=${saldo} method="post" class="get-form">
+          <input type="hidden" id="empleado-0" 
+          th:name="empleado.id" th:value="${session.empleado.id}" required>
+            
+          <div class="row my-3 mx-0">
+            <div class="col p-0 mr-2 col-s">
+              <label class="h5">Fondo de caja</label>            
+              <input th:if="${titulo == 'Nuevo'}" type="number" class="form-control form-control-lg" 
+                id="fondo-caja" th:name="fondoCaja"
+                placeholder="Fondo de caja" min="0.1" step=".01"
+                title="Ingresar el fondo de caja" required>
+              
+              <!-- Input modificar --> 
+              <input th:if="${titulo == 'Modificar'}" type="number" class="form-control form-control-lg fix-decimals" 
+                id="fondo-caja" th:name="fondoCaja" th:value="${saldoModificar.fondoCaja}"
+                placeholder="Fondo de caja" min="0.1" step=".01"
+                title="Ingresar el fondo de caja" required>
+            </div>
+              
+            <div class="col p-0 mr-2 bill-div-size col-s">
+              <label class="h5 bill-label-size">Abono a compras</label>            
+              <input th:if="${titulo == 'Nuevo'}" type="number" class="form-control form-control-lg fix-decimals" 
+                id="abono-compra" th:name="abonoCompra" th:value="${abonoCompra}"
+                placeholder="Abono a compras" min="0.1" step=".01"
+                title="Abono a compras" readonly>
+              
+              <!-- Input modificar --> 
+              <input th:if="${titulo == 'Modificar'}" type="number" class="form-control form-control-lg fix-decimals" 
+                id="abono-compra" th:name="abonoCompra" th:value="${saldoModificar.abonoCompra}"
+                placeholder="Abono a compras" min="0.1" step=".01"
+                title="Abono a compras" readonly>
+            </div>
+              
+            <div class="col p-0 mr-2 col-s">
+              <label class="h5">Compra total</label>            
+              <input th:if="${titulo == 'Nuevo'}" type="number" class="form-control form-control-lg fix-decimals" 
+                id="compra-total" th:name="compraTotal" th:value="${compraTotal}"
+                placeholder="Compra total" min="0.1" step=".01"
+                title="Compra total" readonly>
+                
+              <!-- Input modificar --> 
+              <input th:if="${titulo == 'Modificar'}" type="number" class="form-control form-control-lg fix-decimals" 
+                id="compra-total" th:name="compraTotal" th:value="${saldoModificar.compraTotal}"
+                placeholder="Compra total" min="0.1" step=".01"
+                title="Compra total" readonly>
+            </div>
+              
+            <div class="col p-0 mr-2 col-s">
+              <label class="h5">Venta total</label>            
+              <input th:if="${titulo == 'Nuevo'}" type="number" class="form-control form-control-lg fix-decimals" 
+                id="venta-total" th:name="ventaTotal" th:value="${ventaTotal}"
+                placeholder="Venta total" min="0.1" step=".01"
+                title="Venta total" readonly>
+                
+              <!-- Input modificar --> 
+              <input th:if="${titulo == 'Modificar'}" type="number" class="form-control form-control-lg fix-decimals" 
+                id="venta-total" th:name="ventaTotal" th:value="${saldoModificar.ventaTotal}"
+                placeholder="Venta total" min="0.1" step=".01"
+                title="Venta total" readonly>
+            </div>
+              
+            <div class="col p-0 mr-2 col-s">
+              <label class="h5">Total</label>            
+              <input th:if="${titulo == 'Nuevo'}" type="number" class="form-control form-control-lg" 
+                id="total" th:name="total"
+                placeholder="Total" min="0.1" step=".01"
+                title="Total" readonly>
+                
+              <!-- Input modificar --> 
+              <input th:if="${titulo == 'Modificar'}" type="number" class="form-control form-control-lg fix-decimals" 
+                id="total" th:name="total" th:value="${saldoModificar.total}"
+                placeholder="Total" min="0.1" step=".01"
+                title="Total" readonly>
+            </div>
+          </div>
+            
+          <div class="row my-3 mx-0  d-flex justify-content-end">
+            <button class="btn btn-green text-white font-weight-bold text-nowrap" type="submit"
+            th:attrappend="disabled=${existeSaldo != null} ? 'true'">
+              Guardar saldo
+   		    </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <th:block layout:fragment="decimal"><script th:src="@{/js/fixdecimals.js}"></script></th:block>
+  </body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{fragments/layout}">
+  <head>
+    <title>Inicio</title>
+    <meta charset="UTF-8">
+  </head>
+  <body>
+    <div layout:fragment="content">
+      <div class="text-break">
+        <h4>Bienvenido <span th:text="${session.empleado.nombre}"></span></h4>
+        
+        <div class="row">
+          <div class="col-md-auto col-s">
+            <div class="card">
+              <div class="card-header bg-green border-0 text-white font-weight-bold">Productos más vendidos</div>
+              <ul class="list-group list-group-flush">
+                <th:block th:each="producto, i: ${productos}">
+                  <li class="list-group-item">
+                    <b th:text="${i.index + 1 + '. '}"></b>
+                    <span th:text="${producto.nombre}"></span>
+                  </li>
+                </th:block>
+              </ul>
+            </div>
+          </div>
+          <div class="col d-flex align-items-center w-50 p-0 mx-3 border rounded">
+            <canvas id="grafica" style="max-height: 391px;"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+    <th:block layout:fragment="chart"><script th:src="@{/js/chart.js}"></script></th:block>
+  </body>
+</html>

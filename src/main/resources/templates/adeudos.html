@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{fragments/layout}">
+  <head>
+    <title>Adeudos</title>
+    <meta charset="UTF-8">
+  </head>
+  <body>
+    <div layout:fragment="content">
+      <div class="row pt-1 pb-1 mb-1 mx-0 flex-nowrap float-right">
+        <div class="col-md-auto pr-0 dropdown">
+          <button class="btn btn-secondary float-right" 
+          type="button" id="filterButton" 
+          data-toggle="dropdown" aria-haspopup="true" 
+          aria-expanded="false"
+          title="Filtrar adeudos de la tabla">
+            <i class="fas fa-filter"></i>
+          </button>
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="filterButton">
+            <input id="filtro" type="text" class="form-control m-2" placeholder="Filtrar por datos del adeudo">
+          </div>
+        </div>
+      </div>
+      <p
+      id="swInfo" class="d-none"
+      th:data1="${desc}" 
+      th:data2="${session.swTitle}" 
+      th:data3="${session.swText}" 
+      th:data4="${session.swIcon}">
+      </p>
+      <div class="table-responsive">
+	    <table class="table table-hover">
+	      <thead class="thead-light">
+	        <tr>
+	          <th class="align-middle text-center">Código</th>
+	  	      <th class="align-middle text-center">Compra</th>
+	  	      <th class="align-middle text-center">Proveedor</th>
+	  	      <th class="align-middle text-center">Monto</th>
+	  	      <th class="align-middle text-center">Estatus</th>
+	  	      <th class="align-middle text-center">Fecha</th>
+	  	      <th class="align-middle text-center">Acciones</th>
+	        </tr>
+	      </thead>
+	      <tbody id="tabla">
+	        <th:block th:each="adeudo: ${adeudos}">
+              <tr>
+                <td class="text-center align-middle"><p th:text="${adeudo.id}"></p></td>
+                <td class="text-center align-middle"><p th:text="${adeudo.compra.id}"></p></td>
+                <td class="align-middle"><p th:text="${adeudo.compra.proveedor.nombre}"></p></td>
+                <td class="text-center align-middle">
+                  <p th:text="${#strings.concat('$', #numbers.formatDecimal(adeudo.monto, 1, 2, 'POINT'))}"></p>
+                </td>
+                <td class="text-center align-middle">
+                  <p th:text="${adeudo.estatus} ? 'Pagado' : 'Pendiente'"></p>
+                </td>
+                <td class="text-center align-middle">
+                  <th:block th:with="sdf = ${new java.text.SimpleDateFormat('yyyy-MM-dd''T''HH:mm:ss')}">
+                    <p th:text=" ${#dates.format(
+                    #calendars.createForTimeZone(
+                    #calendars.year(sdf.parse(adeudo.fechaCreacion)), 
+                    #calendars.month(sdf.parse(adeudo.fechaCreacion)), 
+                    #calendars.day(sdf.parse(adeudo.fechaCreacion)), 
+                    #calendars.hour(sdf.parse(adeudo.fechaCreacion)), 
+                    #calendars.minute(sdf.parse(adeudo.fechaCreacion)),'Mexico_City'), 'dd/MM/yyyy HH:mm')}"></p>
+                  </th:block>
+                </td>
+                <td class="text-center align-middle" style="width: 5%;">
+                  <a class="btn btn-primary" title="Pagar adeudo" th:href="@{'/adeudo/' + ${adeudo.id}}">
+                    <i class="fas fa-wallet"></i>
+                  </a>
+                </td>
+              </tr>
+            </th:block>
+          </tbody>
+	    </table>
+	  </div>
+    </div>
+    <th:block layout:fragment="chart"><script th:src="@{/js/tablefilter.js}"></script></th:block>
+  </body>
+</html>
